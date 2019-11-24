@@ -5,30 +5,30 @@ import Data.List (group)
 main :: IO ()
 main = do
     fileName <- head <$> getArgs
-    writeFile (fileName ++ ".out.hs") 
+    writeFile (fileName ++ ".out.hs")
         =<<  stringOps
-        . unlines 
-        . lineOps 
-        . lines 
+        . unlines
+        . lineOps
+        . lines
         <$> readFile fileName
         where
             lineOps =  trimLastNewlines .map trimLastWhitespaces . filter (not . isWhitespace)
-            stringOps = trimNewlines 
+            stringOps = trimNewlines
 
-isWhitespace :: String -> Bool     
+isWhitespace :: String -> Bool
 isWhitespace [] = False
-isWhitespace line = all (`elem` [' ', '\t']) line       
+isWhitespace line = all (`elem` [' ', '\t']) line
 
 trimNewlines :: String -> String
-trimNewlines = 
-    concatMap enforceTwoSequentialNewlineMax . group  
+trimNewlines =
+    concatMap enforceTwoSequentialNewlineMax . group
 
-enforceTwoSequentialNewlineMax :: String -> String       
+enforceTwoSequentialNewlineMax :: String -> String
 enforceTwoSequentialNewlineMax ('\n':'\n':_) = "\n\n"
 enforceTwoSequentialNewlineMax x = x
 
 trimWhitespaceOnlyLines :: String -> String
-trimWhitespaceOnlyLines line 
+trimWhitespaceOnlyLines line
     | isWhitespace line = ""
     | otherwise = line
 
@@ -42,4 +42,4 @@ trimLastNewlines :: [String] -> [String]
 trimLastNewlines [] = []
 trimLastNewlines lines
     | last lines == "" = trimLastNewlines $ init lines
-    | otherwise = lines 
+    | otherwise = lines
