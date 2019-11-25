@@ -4,7 +4,7 @@ import Data.List (group)
 
 main :: IO ()
 main = do
-    fileName <- head <$> getArgs
+     fileName <- head <$> getArgs
     writeFile (fileName ++ ".out.hs") 
         =<<  stringOps
         . unlines

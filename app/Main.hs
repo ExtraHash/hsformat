@@ -49,15 +49,15 @@ trimLastNewlines lines
     | last lines == "" = trimLastNewlines $ init lines
     | otherwise = lines
 
-countIndent :: String -> Integer -> Integer
-countIndent line startCount
-    | head line == ' ' = countIndent line (startCount + 1)
-    | otherwise = startCount
+countIndent [] count = count
+countIndent (x:xs) count
+    | x == ' ' = countIndent xs (count + 1)
+    | otherwise = count
 
 fixIndent :: String -> String
 fixIndent line
     | rem (countIndent line 0) 4 == 0 = line
-    | otherwise = addLeadingWhitespace line 4
+    | otherwise = addLeadingWhitespace ( trimLeadingWhitespace line ) 4
 
 trimLeadingWhitespace :: String -> String
 trimLeadingWhitespace line
