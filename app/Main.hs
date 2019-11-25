@@ -5,19 +5,18 @@ import Data.List (group)
 main :: IO ()
 main = do
     fileName <- head <$> getArgs
-    writeFile (fileName ++ ".out.hs") 
+    writeFile (fileName ++ ".out.hs")
         =<<  stringOps
         . unlines
         . lineOps
         . lines
         <$> readFile fileName
         where
-            lineOps 
-                = trimLastNewlines 
+            lineOps
+                = trimLastNewlines
                 . map  (fixIndent . trimLastWhitespaces)
                 . filter (not . isWhitespace)
             stringOps = trimNewlines
-    
 
 isWhitespace :: String -> Bool
 isWhitespace [] = False
@@ -39,7 +38,7 @@ trimWhitespaceOnlyLines line
 trimLastWhitespaces :: String -> String
 trimLastWhitespaces [] = []
 trimLastWhitespaces line
-    | last line == ' ' || last line == '\t' = 
+    | last line == ' ' || last line == '\t' =
         trimLastWhitespaces $ init line
     | otherwise = line
 
@@ -57,7 +56,8 @@ countIndent (x:xs) count
 fixIndent :: String -> String
 fixIndent line
     | rem (countIndent line 0) 4 == 0 = line
-    | otherwise = addLeadingWhitespace ( trimLeadingWhitespace line ) 4
+    | rem ( countIndent line 0) 4 == 1 = tail line
+    | otherwise = addLeadingWhitespace line ( 4 -  rem ( countIndent line 0) 4)
 
 trimLeadingWhitespace :: String -> String
 trimLeadingWhitespace line
