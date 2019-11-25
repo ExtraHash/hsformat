@@ -14,7 +14,7 @@ main = do
         where
             lineOps 
                 = trimLastNewlines 
-                . map  (fixIndent . trimLastWhitespaces)
+                . map trimLastWhitespaces 
                 . filter (not . isWhitespace)
             stringOps = trimNewlines
     
@@ -49,14 +49,9 @@ trimLastNewlines lines
     | last lines == "" = trimLastNewlines $ init lines
     | otherwise = lines
 
-countIndent :: String -> Integer -> Integer
-countIndent line startCount
-    | head line == ' ' = countIndent line (startCount + 1)
-    | otherwise = startCount
-
 fixIndent :: String -> String
 fixIndent line
-    | rem (countIndent line 0) 4 == 0 = line
+    | rem (length line) 4 == 0 = line
     | otherwise = addLeadingWhitespace line 4
 
 trimLeadingWhitespace :: String -> String
